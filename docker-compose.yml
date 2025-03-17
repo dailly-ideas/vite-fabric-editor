@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # Development service with hot-reload
+  dev:
+    image: node:18-alpine
+    container_name: react-editor-dev
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
+    environment:
+      - NODE_ENV=development
+      - VITE_HOST=0.0.0.0
+
+  # Production service
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-editor-prod
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
