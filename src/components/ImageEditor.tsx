@@ -31,27 +31,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ width = 800, height = 600 }) 
     }
   }, [width, height]);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && canvas) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imgUrl = e.target?.result as string;
-        setBackgroundImage(imgUrl);
-        fabric.Image.fromURL(imgUrl, (img) => {
-          img.scaleToWidth(width);
-          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const logShapePosition = (obj: fabric.Object) => {
     const boundingRect = obj.getBoundingRect();
     if (obj instanceof fabric.Circle) {
-      const scaledRadius = (obj as fabric.Circle).radius * obj.scaleX;
-      console.log(`Circle - Position: (${boundingRect.left.toFixed(2)}, ${boundingRect.top.toFixed(2)}), Radius: ${scaledRadius.toFixed(2)}`);
+      // const scaledRadius = obj.radius * obj.scaleX;
+      // console.log(`Circle - Position: (${boundingRect.left.toFixed(2)}, ${boundingRect.top.toFixed(2)}), Radius: ${scaledRadius.toFixed(2)}`);
     } else {
       console.log(`Rectangle - Position: (${boundingRect.left.toFixed(2)}, ${boundingRect.top.toFixed(2)}), Size: ${boundingRect.width.toFixed(2)}x${boundingRect.height.toFixed(2)}`);
     }
@@ -128,7 +112,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ width = 800, height = 600 }) 
   return (
     <div className="image-editor">
       <div className="toolbar">
-        <input type="file" accept="image/*" onChange={handleImageUpload} />
         <button onClick={() => addShape('rect')}>Add Rectangle</button>
         <button onClick={() => addShape('circle')}>Add Circle</button>
         <button onClick={deleteSelected}>Delete Selected</button>
